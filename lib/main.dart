@@ -4,7 +4,7 @@ import 'package:park_monitor_app/parks/view.dart';
 import 'package:get/get.dart';
 
 void main() {
-  final controller = Get.put(ParkingPageController());
+  final controller = Get.put(ParkingController());
   controller.mqttConnect();
   runApp(const MyApp());
 }
@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
+    return GetMaterialApp(
+      title: 'Car park monitoring system',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.purple,

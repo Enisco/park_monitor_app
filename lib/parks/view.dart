@@ -13,7 +13,7 @@ class ParkingPageView extends StatefulWidget {
 }
 
 class _ParkingPageViewState extends State<ParkingPageView> {
-  final controller = Get.put(ParkingPageController());
+  final controller = Get.put(ParkingController());
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class _ParkingPageViewState extends State<ParkingPageView> {
         children: [
           const SizedBox(height: 50),
           const Text(
-            'Test Car Park',
+            'Car Park',
             style: TextStyle(
                 color: Colors.black, fontSize: 18, fontWeight: FontWeight.w800),
           ),
@@ -76,35 +76,47 @@ class _ParkingPageViewState extends State<ParkingPageView> {
                     ),
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(
-                      CupertinoIcons.car_detailed,
-                      size: 50,
-                      color: Colors.red[600],
-                    ),
-                    divLine(),
-                    // Icon(
-                    //   CupertinoIcons.car_detailed,
-                    //   size: 50,
-                    //   color: Colors.green[800],
-                    // ),
-                    const SizedBox(
-                      height: 50,
-                      width: 50,
-                    ),
-                    divLine(),
-                    // Icon(
-                    //   CupertinoIcons.car_detailed,
-                    //   size: 50,
-                    //   color: Colors.blue[800],
-                    // ),
-                    const SizedBox(
-                      height: 50,
-                      width: 50,
-                    )
-                  ],
+                GetBuilder<ParkingController>(
+              init: ParkingController(),
+              builder: (_controller) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        controller.spacesStates[0]
+                            ? Icon(
+                                CupertinoIcons.car_detailed,
+                                size: 50,
+                                color: Colors.red[600],
+                              )
+                            : const SizedBox(
+                                height: 50,
+                                width: 50,
+                              ),
+                        divLine(),
+                        controller.spacesStates[1]
+                            ? Icon(
+                                CupertinoIcons.car_detailed,
+                                size: 50,
+                                color: Colors.green[800],
+                              )
+                            : const SizedBox(
+                                height: 50,
+                                width: 50,
+                              ),
+                        divLine(),
+                        controller.spacesStates[2]
+                            ? Icon(
+                                CupertinoIcons.car_detailed,
+                                size: 50,
+                                color: Colors.blue[800],
+                              )
+                            : const SizedBox(
+                                height: 50,
+                                width: 50,
+                              )
+                      ],
+                    );
+                  }
                 ),
               ],
             ),
@@ -117,7 +129,7 @@ class _ParkingPageViewState extends State<ParkingPageView> {
 
 Widget divLine() {
   return Container(
-    height: 180,
+    height: 150,
     width: 3,
     color: Colors.white,
   );

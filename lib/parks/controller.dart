@@ -4,9 +4,22 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:mqtt_client/mqtt_client.dart';
-import 'package:park_monitor_app/variables_constant.dart';
 
-class ParkingPageController extends GetxController {
+class ParkingController extends GetxController {
+  String commandMessage = "";
+  int commandDigit = 0;
+  var receivedMessage = '000';
+  List<bool> spacesStates = [false, false, false];
+
+  /// MQTT EMQX Credentials
+  final client = MqttServerClient.withPort(
+      'broker.emqx.io', 'parkingsystem_client1', 1883);
+  var pongCount = 0, connStatus = 0;
+  String topic = 'futa/park/monitor';
+  final builder = MqttClientPayloadBuilder();
+// const subTopic = 'ParkingSystem/ReceiveFromField';
+
+  /// Functions
   Future<void> mqttConnect() async {
     Completer<MqttServerClient> completer = Completer();
 
@@ -55,11 +68,19 @@ class ParkingPageController extends GetxController {
     client.updates?.listen((List<MqttReceivedMessage<MqttMessage?>>? c) {
           final recMess = c![0].payload as MqttPublishMessage;
 
-          pt =
+          receivedMessage =
               MqttPublishPayload.bytesToStringAsString(recMess.payload.message);
 
-          print(
-              'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is <-- $pt -->');
+          // print(
+          //     'EXAMPLE::Change notification:: topic is <${c[0].topic}>, payload is => $receivedMessage.');
+
+          String spaceNode = receivedMessage.substring(5, 6);
+          String spaceValue = receivedMessage.substring(19);
+          print('spaceNode: $spaceNode, spaceValue: $spaceValue');
+
+          spacesStates[int.parse(spaceNode) - 1] =
+              int.parse(spaceValue) < 200 ? true : false;
+          update();
         }) ??
         client.published?.listen((MqttPublishMessage message) {
           print(
